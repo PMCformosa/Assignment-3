@@ -1,0 +1,100 @@
+---
+title: "DATA607_Assignment_3"
+author: "PeiMing Chen"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+Introduction 
+The assignment of this week (week 3) is given to us to practice on regular expressions. Three libraries below were downloaded to solve the four problems. 
+```{r load-packages, message=FALSE}
+library(tidyverse)
+library(openintro)
+library(dplyr)
+```
+
+### Codes that identify the majors that contain either "DATA" or "STATISTICS"
+
+Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either “DATA” or “STATISTICS”
+
+```{r code-chunk-label}
+UMajors <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv", header = TRUE, sep =",")
+UMajors
+```
+
+### 1 
+select column of majors 
+
+```{r }
+UMajors$Major %>% str_subset(pattern = "DATA")
+
+```
+
+```{r }
+UMajors$Major %>% str_subset(pattern = "STATISTICS")
+```
+
+### 2 
+```{r }
+DataSet <- data.frame(c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper","cloudberry", "elderberry", "lime",    "lychee", "mulberry", "olive","salal berry"))
+cat(paste(DataSet))
+```
+
+### 3, Describe, in words, what these expressions will match:
+Examples are run below for each expression discussed. 
+(.)\1\1
+The regular expression is to match a pattern in a string that has character repeated in it. For example, in a string like "888kjpf", it match 888
+
+"(.)(.)\\2\\1"
+This is to match any character has itself and also followed by its reverse order.
+
+(..)\1: This does not match anything. Instead," (..)\\1 "will match any two characters that repeated.
+
+"(.).\\1.\\1": This expression is to match a character followed by any other character and then followed by the original character again. 
+
+"(.)(.)(.).*\\3\\2\\1" :  This expression is to match the first three letters and the last three letters that are the same letters with reverse order. The characters in between the first and the last thress characters could be any character in any orders. 
+
+```{r }
+Test <- c("bluesky", "10000","TTT","hihihi","YaYaYu77","AOOA","QQQQQQ","Alico","Apia","Aka","aacBytfrhhcaa","998","Alico" )
+
+str_match(Test,"(.)\1\1")
+
+str_match(Test,"(.)(.)\\2\\1")
+
+str_match(Test,"(..)\\1")
+
+str_match(Test,"(.).\\1.\\1")
+
+str_match(Test,"(.)(.)(.).*\\3\\2\\1")
+
+```
+
+### 4
+Construct regular expressions to match words that:
+Start and end with the same character.:  "^(.).*\\1$"
+
+Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+: "^(..).*\\1$"
+
+Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.) : "(.).*\\1.*\\1"
+
+```{r }
+Data4 <- c("bluesky", "100001","TTT","hihihi","YaYaYu77","AOOA","QQQaQQQ","Alico","Apia","Aka","aacBytfrhhcaa","9989","Alico" )
+
+result <- str_subset(Data4, "^(.).*\\1$")
+result
+```
+
+```{r }
+Data4 <- c("bluesky", "100001","TTT","hihihi","YaYaYu77","AOOA","QQQaQQQ","Alico","Apia","Aka","aacBytfrhhcaa","9989","Alico" )
+
+result <- str_subset(Data4,"^(..).*\\1$" )
+result
+```
+
+```{r }
+Data4 <- c("bluesky", "100001","TTT","hihihi","YaYaYu77","AOOA","QQQaQQQ","Alico","Apia","Aka","aacBytfrhhcaa","9989","Alico" )
+
+result <- str_subset(Data4,"(.).*\\1.*\\1" )
+result
+```
+
